@@ -1,7 +1,10 @@
 import { Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
 import { Ingredient } from './interface';
-import { CreateIngredientDto } from './dto/create-ingredinet.dto';
+import {
+  CreateIngredientDto,
+  UpdateIngredientDto,
+} from './dto/create-ingredinet.dto';
 
 @Injectable()
 export class IngredientsService {
@@ -17,5 +20,16 @@ export class IngredientsService {
 
   async findAll(): Promise<any[]> {
     return this.ingredientModel.find().exec();
+  }
+
+  async update(
+    id: string,
+    updateIngredientDto: UpdateIngredientDto,
+  ): Promise<any> {
+    const findIngridient = await this.ingredientModel
+      .findOneAndUpdate({ _id: id }, updateIngredientDto, { new: true })
+      .exec();
+    console.log('in', findIngridient);
+    return findIngridient;
   }
 }
